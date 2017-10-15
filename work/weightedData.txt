@@ -1,0 +1,186 @@
+==================================================================================================================================================================
+1) Core 1
+
+def calculate_position_score(mv, height, width):
+        
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 1 or mv[1] > width - 2):
+        return 1
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 2 or mv[1] > width - 3) or \
+        (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 1 or mv[1] > width - 2):
+        return 2
+    if (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 2 or mv[1] > width - 3):
+        return 3
+    if (mv[0] < 2 or mv[0] > height - 3) or (mv[1] < 2 or mv[1] > width - 3):
+        return 5    
+    
+    return 7
+
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    w = game.width
+    h = game.height
+    
+    #loc = game.get_player_location(player)
+    #op_loc = game.get_player_location(opponent)
+    
+    mvs_weigth = sum([calculate_position_score(m, h, w) for m in mvs ])
+    op_mvs_weigth = sum([calculate_position_score(m, h, w) for m in op_mvs])
+    
+    res =  mvs_weigth - op_mvs_weigth
+    return float(res)
+
+
+ Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     48  |  52    54  |  46    55  |  45    50  |  50    55  |  45    65  |  35    56  |  44    56  |  44    56  |  44    53  |  47  
+    2      AB_Center    60  |  40    61  |  39    60  |  40    57  |  43    58  |  42    66  |  34    58  |  42    63  |  37    62  |  38    67  |  33  
+    3     AB_Improved   56  |  44    53  |  47    54  |  46    58  |  42    51  |  49    54  |  46    54  |  46    55  |  45    46  |  54    58  |  42  
+--------------------------------------------------------------------------
+           Win Rate:      54.7%        56.0%        56.3%        55.0%        54.7%        61.7%        56.0%        58.0%        54.7%        59.3%    
+
+Open            : 55.56±3.80%
+Center          : 61.33±3.33%
+Improved        : 53.67±3.43%
+
+Total           : 56.85±4.81%
+		   
+==================================================================================================================================================================
+2) Core 2
+
+def calculate_position_score(mv, height, width):
+        
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 1 or mv[1] > width - 2):
+        return 1
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 2 or mv[1] > width - 3) or \
+        (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 1 or mv[1] > width - 2):
+        return 2
+    if (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 2 or mv[1] > width - 3):
+        return 3
+    if (mv[0] < 2 or mv[0] > height - 3) or (mv[1] < 2 or mv[1] > width - 3):
+        return 4    
+    
+    return 5
+
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    w = game.width
+    h = game.height
+    
+    #loc = game.get_player_location(player)
+    #op_loc = game.get_player_location(opponent)
+    
+    mvs_weigth = sum([calculate_position_score(m, h, w) for m in mvs ])
+    op_mvs_weigth = sum([calculate_position_score(m, h, w) for m in op_mvs])
+    
+    res =  mvs_weigth - op_mvs_weigth
+    return float(res)
+
+	
+	 Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     48  |  52    55  |  45    51  |  49    54  |  46    51  |  49    58  |  42    54  |  46    55  |  45    59  |  41    55  |  45  
+    2      AB_Center    61  |  39    61  |  39    65  |  35    59  |  41    55  |  45    57  |  43    59  |  41    60  |  40    67  |  33    66  |  34  
+    3     AB_Improved   46  |  54    47  |  53    49  |  51    46  |  54    48  |  52    59  |  41    51  |  49    54  |  46    55  |  45    48  |  52  
+--------------------------------------------------------------------------
+           Win Rate:      51.7%        54.3%        55.0%        53.0%        51.3%        58.0%        54.7%        56.3%        60.3%        56.3%    
+
+Open            : 54.67±2.54%
+Center          : 61.00±3.92%
+Improved        : 50.78±4.10%
+
+Total           : 55.48±5.53%
+		   
+==================================================================================================================================================================
+3) Core 3
+
+
+def calculate_position_score(mv, height, width):
+        
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 1 or mv[1] > width - 2):
+        return 1.1
+    if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 2 or mv[1] > width - 3) or \
+        (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 1 or mv[1] > width - 2):
+        return 1.2
+    if (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 2 or mv[1] > width - 3):
+        return 1.3
+    if (mv[0] < 2 or mv[0] > height - 3) or (mv[1] < 2 or mv[1] > width - 3):
+        return 1.5    
+    
+    return 1.7
+
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    w = game.width
+    h = game.height
+    
+    #loc = game.get_player_location(player)
+    #op_loc = game.get_player_location(opponent)
+    
+    mvs_weigth = sum([calculate_position_score(m, h, w) for m in mvs ])
+    op_mvs_weigth = sum([calculate_position_score(m, h, w) for m in op_mvs])
+    
+    res =  mvs_weigth - op_mvs_weigth
+    return float(res)
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     50  |  50    57  |  43    52  |  48    57  |  43    53  |  47    65  |  35    52  |  48    51  |  49    51  |  49    51  |  49  
+    2      AB_Center    57  |  43    56  |  44    62  |  38    66  |  34    60  |  40    65  |  35    55  |  45    60  |  40    64  |  36    57  |  43  
+    3     AB_Improved   55  |  45    54  |  46    55  |  45    60  |  40    50  |  50    52  |  48    49  |  51    44  |  56    54  |  46    52  |  48  
+--------------------------------------------------------------------------
+           Win Rate:      54.0%        55.7%        56.3%        61.0%        54.3%        60.7%        52.0%        51.7%        56.3%        53.3%    
+
+Open            : 54.33±4.40%
+Center          : 60.56±3.77%
+Improved        : 52.22±4.18%
+
+Total           : 55.70±5.44%
+		   
+==================================================================================================================================================================

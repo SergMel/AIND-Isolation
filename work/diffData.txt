@@ -1,0 +1,301 @@
+==================================================================================================================================================================
+1) Core 1 
+
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    res = len(mvs) - len(op_mvs)
+    return float(res)
+
+
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     60  |  40    52  |  48    54  |  46    47  |  53    57  |  43    55  |  45    54  |  46    57  |  43    49  |  51    61  |  39  
+    2      AB_Center    65  |  35    56  |  44    61  |  39    61  |  39    57  |  43    70  |  30    56  |  44    57  |  43    58  |  42    63  |  37  
+    3     AB_Improved   53  |  47    51  |  49    53  |  47    52  |  48    44  |  56    53  |  47    46  |  54    53  |  47    52  |  48    46  |  54  
+--------------------------------------------------------------------------
+           Win Rate:      59.3%        53.0%        56.0%        53.3%        52.7%        59.3%        52.0%        55.7%        53.0%        56.7%    
+
+There were 1.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 54.00±4.03%
+Center          : 59.89±4.28%
+Improved        : 50.00±3.40%
+
+Total           : 54.63±5.64%
+==================================================================================================================================================================
+2) Core 2
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    res = float(len(mvs)) - 0.001 * len(op_mvs) 
+
+    return res
+
+ Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     58  |  42    57  |  43    49  |  51    56  |  44    56  |  44    49  |  51    52  |  48    57  |  43    55  |  45    62  |  38  
+    2      AB_Center    59  |  41    65  |  35    58  |  42    63  |  37    70  |  30    65  |  35    62  |  38    61  |  39    52  |  48    59  |  41  
+    3     AB_Improved   55  |  45    49  |  51    50  |  50    48  |  52    51  |  49    52  |  48    46  |  54    53  |  47    54  |  46    58  |  42  
+--------------------------------------------------------------------------
+           Win Rate:      57.3%        57.0%        52.3%        55.7%        59.0%        55.3%        53.3%        57.0%        53.7%        59.7%    
+
+There were 1.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.	
+
+Open            : 54.78±3.94%
+Center          : 61.67±4.81%
+Improved        : 51.22±3.36%
+
+Total           : 55.89±5.95%
+
+==================================================================================================================================================================	
+3) Core 3
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")    
+
+    return float(len(mvs)) - 100.0 * len(op_mvs) 
+
+
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     52  |  48    61  |  39    53  |  47    47  |  53    59  |  41    59  |  41    51  |  49    58  |  42    50  |  50    46  |  54  
+    2      AB_Center    54  |  46    69  |  31    58  |  42    60  |  40    57  |  43    60  |  40    58  |  42    57  |  43    59  |  41    63  |  37  
+    3     AB_Improved   54  |  46    44  |  56    54  |  46    48  |  52    53  |  47    50  |  50    46  |  54    55  |  45    50  |  50    47  |  53  
+--------------------------------------------------------------------------
+           Win Rate:      53.3%        58.0%        55.0%        51.7%        56.3%        56.3%        51.7%        56.7%        53.0%        52.0%    
+
+There were 7.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 53.78±5.31%
+Center          : 60.11±3.60%
+Improved        : 49.67±3.56%
+
+Total           : 54.52±6.03%
+
+==================================================================================================================================================================
+4) Core 4
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    mvs_count = len(mvs)
+    op_mvs_count = len(op_mvs)      
+    
+    res = 1.01 * mvs_count - float(op_mvs_count)
+
+    return res
+
+
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     59  |  41    48  |  52    56  |  44    46  |  54    55  |  45    50  |  50    62  |  38    55  |  45    55  |  45    58  |  42  
+    2      AB_Center    59  |  41    64  |  36    58  |  42    64  |  36    60  |  40    58  |  42    64  |  36    65  |  35    57  |  43    63  |  37  
+    3     AB_Improved   51  |  49    55  |  45    45  |  55    45  |  55    56  |  44    48  |  52    56  |  44    50  |  50    47  |  53    44  |  56  
+--------------------------------------------------------------------------
+           Win Rate:      56.3%        55.7%        53.0%        51.7%        57.0%        52.0%        60.7%        56.7%        53.0%        55.0%    
+
+There were 1.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 53.89±4.75%
+Center          : 61.44±2.99%
+Improved        : 49.56±4.65%
+
+Total           : 54.96±6.47%
+==================================================================================================================================================================
+5) Core 5
+
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    mvs_count = len(mvs)
+    op_mvs_count = len(op_mvs)      
+    
+    res = float(mvs_count) - 1.01 * op_mvs_count
+
+    return res
+
+	
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     46  |  54    59  |  41    47  |  53    52  |  48    53  |  47    50  |  50    53  |  47    51  |  49    52  |  48    56  |  44  
+    2      AB_Center    49  |  51    67  |  33    60  |  40    55  |  45    57  |  43    63  |  37    66  |  34    62  |  38    58  |  42    62  |  38  
+    3     AB_Improved   47  |  53    50  |  50    50  |  50    53  |  47    43  |  57    54  |  46    55  |  45    50  |  50    51  |  49    47  |  53  
+--------------------------------------------------------------------------
+           Win Rate:      47.3%        58.7%        52.3%        53.3%        51.0%        55.7%        58.0%        54.3%        53.7%        55.0%    
+
+There were 1.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 52.56±3.24%
+Center          : 61.11±3.78%
+Improved        : 50.33±3.46%
+
+Total           : 54.67±5.82%
+
+==================================================================================================================================================================
+6) Core 6
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    mvs_count = len(mvs)
+    op_mvs_count = len(op_mvs)      
+    
+    res = float( mvs_count - op_mvs_count) + (mvs_count * 0.01) / op_mvs_count 
+
+    return res
+
+
+	
+Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     54  |  46    52  |  48    49  |  51    52  |  48    55  |  45    57  |  43    48  |  52    55  |  45    50  |  50    56  |  44  
+    2      AB_Center    54  |  46    58  |  42    64  |  36    53  |  47    57  |  43    62  |  38    56  |  44    62  |  38    54  |  46    58  |  42  
+    3     AB_Improved   52  |  48    58  |  42    48  |  52    52  |  48    47  |  53    56  |  44    48  |  52    55  |  45    54  |  46    52  |  48  
+--------------------------------------------------------------------------
+           Win Rate:      53.3%        56.0%        53.7%        52.3%        53.0%        58.3%        50.7%        57.3%        52.7%        55.3%    
+
+There were 3.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 52.67±3.06%
+Center          : 58.22±3.55%
+Improved        : 52.22±3.68%
+
+Total           : 54.37±4.39%
+
+==================================================================================================================================================================
+7) Core 7
+
+def custom_score_t(game, player, k):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+    
+    opponent = game.get_opponent(player)           
+    op_mvs = game.get_legal_moves(opponent)
+    mvs = game.get_legal_moves(player)
+    
+    if not op_mvs:
+        return float("inf")
+    
+    if not mvs:
+        return float("-inf")
+    
+    mvs_count = len(mvs)
+    op_mvs_count = len(op_mvs)      
+    
+    res = float( mvs_count - op_mvs_count) - (mvs_count * 0.01) / op_mvs_count 
+
+    return res
+
+	
+ Match #   Opponent    AB_Improved   AB_Custom   AB_Custom_0  AB_Custom_1  AB_Custom_2  AB_Custom_3  AB_Custom_4  AB_Custom_5  AB_Custom_6  AB_Custom_7 
+                        Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost   Won | Lost 
+    1       AB_Open     52  |  48    54  |  46    48  |  52    58  |  42    54  |  46    52  |  48    55  |  45    50  |  50    55  |  45    58  |  42  
+    2      AB_Center    54  |  46    63  |  37    61  |  39    51  |  49    61  |  39    52  |  48    58  |  42    61  |  39    64  |  36    58  |  42  
+    3     AB_Improved   53  |  47    47  |  53    53  |  47    47  |  53    52  |  48    43  |  57    51  |  49    55  |  45    43  |  57    59  |  41  
+--------------------------------------------------------------------------
+           Win Rate:      53.0%        54.7%        54.0%        52.0%        55.7%        49.0%        54.7%        55.3%        54.0%        58.3%    
+
+There were 1.0 timeouts during the tournament -- make sure your agent handles search timeout correctly, and consider increasing the timeout margin for your agent.
+
+Open            : 53.78±3.15%
+Center          : 58.78±4.31%
+Improved        : 50.00±5.12%
+
+Total           : 54.19±5.58%
+==================================================================================================================================================================
+
+	
