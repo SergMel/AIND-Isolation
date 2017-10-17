@@ -9,51 +9,30 @@ class SearchTimeout(Exception):
     """Subclass base exception for code clarity. """
     pass
 
-class UF:
- 
- def __init__(self, n):
-  if n < 1:
-   raise ValueError("Number if items should be greter then 0")
-  self.groupIds = list(range(n)) 
-  self.groupCount = n
-  self.sz = [1] * n
-  
- def root(self, i):
-  while i != self.groupIds[i]:  
-   self.groupIds[i] = self.groupIds[self.groupIds[i]]
-   i = self.groupIds[i]
-  return i
- 
- def connected(self,i, j):
-  if i >= len(self.groupIds) or j >= len(self.groupIds):
-    raise ValueError("Item index is out of range")
-  return self.root(i) == self.root(j)
- 
- 
- def union(self, i, j):
-  if self.connected(i, j):
-   return
-  ri = self.root(i)
-  rj = self.root(j)
-  if (self.sz[ri] < self.sz[rj]):
-   self.groupIds[rj] =ri
-   self.sz[ri] +=self.sz[rj]
-  else:
-   self.groupIds[ri] = rj
-   self.sz[rj] += self.sz[ri]
-  self.groupCount -=1   
-  
- def count(self):
-  return self.groupCount
-
-
 def calculate_position_score(mv, height, width):
-        
+    """
+        Calculate weight of current position that equals number of possible 
+        movements from given postion minus 1. For example, knight can go from 
+        corner only to two squares, so the weight equals to 2 - 1 = 1
+    Parameters
+    ----------
+    mv : position on the board
+    height : height of the board
+    width : width of the board
+    
+
+    Returns
+    -------
+    int
+        weight of the position on the board
+    """
     if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 1 or mv[1] > width - 2):
         return 1
     if (mv[0] < 1 or mv[0] > height - 2) and (mv[1] < 2 or mv[1] > width - 3) or \
         (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 1 or mv[1] > width - 2):
         return 2
+    if (mv[0] < 1 or mv[0] > height - 2) or (mv[1] < 1 or mv[1] > width - 2):
+        return 3
     if (mv[0] < 2 or mv[0] > height - 3) and (mv[1] < 2 or mv[1] > width - 3):
         return 3
     if (mv[0] < 2 or mv[0] > height - 3) or (mv[1] < 2 or mv[1] > width - 3):
@@ -61,31 +40,8 @@ def calculate_position_score(mv, height, width):
     
     return 7
 
-def get_index(game, loc):
-    return loc[0] * game.height + loc[1]
-
-def get_location(game, i):
-    return (i % game.height, i // game.height)
-
-def get_moves(game, loc):
-    if loc == Board.NOT_MOVED:
-        return self.get_blank_spaces()
-
-    r, c = loc
-    directions = [(-2, -1), (-2, 1), (-1, -2), (-1, 2),
-                  (1, -2), (1, 2), (2, -1), (2, 1)]
-    valid_moves = [(r + dr, c + dc) for dr, dc in directions
-                   if game.move_is_legal((r + dr, c + dc))]        
-    return valid_moves
 
 
-def get_accessible_count(game, blanks, player ):    
-    dic = dict((get_index(game, blanks[i]), i) for i in range(blanks) )
-    uf = UF(len(blanks))
-    
-    
-    
-    
 def custom_score_t(game, player, k):
     if game.is_loser(player):
         return float("-inf")
@@ -94,7 +50,6 @@ def custom_score_t(game, player, k):
         return float("inf")
     
     opponent = game.get_opponent(player)           
-    
     op_mvs = game.get_legal_moves(opponent)
     mvs = game.get_legal_moves(player)
     
@@ -104,9 +59,18 @@ def custom_score_t(game, player, k):
     if not mvs:
         return float("-inf")
     
-    res = float(len(mvs)) - 0.001 * len(op_mvs) 
+    w = game.width
+    h = game.height
+    
+    #loc = game.get_player_location(player)
+    #op_loc = game.get_player_location(opponent)
+    
+    mvs_weigth = sum([calculate_position_score(m, h, w) for m in mvs ])
+    #op_mvs_weigth = sum([calculate_position_score(m, h, w) for m in op_mvs])
+    
+    res =  mvs_weigth #- op_mvs_weigth
+    return float(res)
 
-    return res
 
 def custom_score(game, player):
     return custom_score_t(game, player, 0.04)
